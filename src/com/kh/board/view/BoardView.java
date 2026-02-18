@@ -1,6 +1,14 @@
 package com.kh.board.view;
 
+import java.util.List;
+import java.util.Scanner;
+
+import com.kh.board.controller.BoardController;
+import com.kh.board.model.vo.Board;
+
 public class BoardView {
+	Scanner sc = new Scanner(System.in);
+	BoardController bc = new BoardController();
 	// 입력을 위한 Scanner변수 선언 및 초기화
 	// 기능 실행을 위한 BoardController 변수 선언 및 초기화.
 	String memberId = null;
@@ -13,8 +21,25 @@ public class BoardView {
 	public void login() {
 		System.out.println("### 게시판 서비스###");
 		System.out.println("서비스 이용을 위해 로그인을 진행해주세요.");
-		System.out.print("ID");
-		System.out.print("PWD");		
+		System.out.print("ID : ");
+		String id= sc.nextLine();
+		System.out.print("PWD : ");		
+		String pwd=sc.nextLine();
+		if(id==null || id.isEmpty()|| pwd==null|| pwd.isEmpty()) {
+			System.out.println("아이디 비번 비번 입력하세요");
+			return;
+		}
+		int login = bc.login(id, pwd);
+		
+		if(login >0) {
+			memberId= id;
+			System.out.println("로그인함");
+			mainMenu();
+		}else {
+			System.out.println("로그인 실패");
+			return;
+		}
+		
 		
 	}
 	
@@ -33,6 +58,21 @@ public class BoardView {
 			System.out.println("4. 게시판 수정하기");
 			System.out.println("5. 게시판 삭제하기");			
 			System.out.println("9. 끝");			
+			int menu = sc.nextInt();
+			
+			switch(menu) {
+			case  1:  selectBoardList(); break;
+			case 2 : selectBoard(); break;
+			case 3: insertBoard(); break;
+			case 4: updateBoard(); break;
+			case 5: deleteBoard(); break;
+			case 9 : 
+				System.out.println("프로그램 종료 합니다");
+				return;
+			default :
+			System.out.println("잘못입력하심");
+			
+			}
 		}
 	}
 	/** 
@@ -42,6 +82,10 @@ public class BoardView {
 	 * */
 	public void selectBoardList() {
 		System.out.println("게시글 번호\t게시글 제목\t작성자\t작성시간");
+		List<Board> list = bc.selectBoardList();
+		for(Board b : list) {
+			System.out.println(b.getBoardNo()+b.getBoardTitle()+b.getMemberId()+b.getCreateDate());
+		}
 	}
 	
 	/** 
@@ -51,17 +95,31 @@ public class BoardView {
 	 * 
 	 * */
 	public void selectBoard() {
+	
+			System.out.println("게시글 번호를 입력하시오");
+			int boardNo= sc.nextInt();
+			sc.nextLine();
+			Board b = bc.selectBoard(boardNo);
+			if(b==null) {
+				System.out.println("없음");
+			}else {
+				System.out.println("게시물 내용"+b.getBoardContent());
+			}
 		
-		System.out.println("게시글 번호\t게시글 제목\t게시글 작성 날짜");
+		}
 		
-		System.out.println("게시글 내용");
-	}
 	
 	/** 
 	 * 게시글 등록 메서드
 	 * 사용자로 하여금 게시글 제목과, 내용을 입력받아 게시글을 등록요청을 보내는 메소드
 	 * */
 	public void insertBoard() {
+		System.out.println("게시글 제목 입력 하시오 ");
+		String boardTitle=sc.next();
+		System.out.println("내용을 입력하시오 ");
+		String boardContent=sc.next();
+		 bc.insertBoard(boardTitle,boardContent);
+		
 		
 	}
 	
@@ -70,7 +128,15 @@ public class BoardView {
 	 * 사용자로 하여금 수정할 게시글 제목 번호과 내용을 입력받아 게시글 수정요청을 보내는 메소드
 	 * */
 	public void updateBoard() {
+	
+		System.out.println("수정할 번호 입력");
+		int boardNo =sc.nextInt();
+		sc.nextLine();
 		
+		System.out.println("수정할 내용 압력");
+		String boardContent=sc.next();
+		
+		bc.updateBoard(boardNo,boardContent);
 	}
 	
 	/** 
@@ -78,8 +144,29 @@ public class BoardView {
 	 * 사용자로 하여금 삭제할 게시글 번호를 입력받아 게시글 삭제 요청을 보내는 메소드
 	 * */
 	public void deleteBoard() {
+		System.out.println("삭제할 게시글 번호 입력");
+		int boardNo= sc.nextInt();
 		
+		bc.deleteBoard(boardNo);
 	}
+	public void displaySuccess(String msg) {
+	    System.out.println(msg);
+	}
+
+	public void displayFail(String msg) {
+	    System.out.println(msg);
+	}
+	public void displayNodata(String message) {
+		System.out.println(message);
+	} 
+	  public void displayList(List<Board> list) {
+	        System.out.println("\n조회된 데이터는 " + list.size() + "건 입니다.\n");
+	        for (int i = 0; i < list.size(); i++) {
+	            System.out.println(list.get(i));
+	        }
+	    }
+
+
 	
 	
 	

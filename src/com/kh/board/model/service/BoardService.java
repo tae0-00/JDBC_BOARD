@@ -53,4 +53,7 @@ public interface BoardService {
 	 * @return 처리된 행의 갯수를 반환
 	 */
 	int deleteBoard(int boardNo);
+
+	
+	
 }

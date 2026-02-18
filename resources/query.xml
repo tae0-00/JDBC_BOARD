@@ -1,9 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
-
-	
-	
+<entry key="login">
+ SELECT count(*) FROM MEMBER WHERE MEMBER_ID = ? AND MEMBER_PWD = ?
+</entry>
+<entry key="selectBoardList">
+ SELECT * FROM BOARD 
+</entry>
+<entry key="selectBoard">
+SELECT BOARD_CONTENT FROM BOARD WHERE BOARD_NO = ?
+</entry>
+<entry key="insertBoard">
+INSERT INTO BOARD (BOARD_TITLE, BOARD_CONTENT ) VALUES(?,?)
+</entry>	
+<entry key="deleteBoard">
+DELETE FROM BOARD WHERE BOARD_NO = ?
+</entry>	
 	
 
 </properties>
